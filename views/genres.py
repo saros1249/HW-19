@@ -13,6 +13,9 @@ class GenresView(Resource):
         res = GenreSchema(many=True).dump(rs)
         return res, 200
 
+    def post(self):
+        pass
+
 
 @genre_ns.route('/<int:rid>')
 class GenreView(Resource):
@@ -20,3 +23,9 @@ class GenreView(Resource):
         r = genre_service.get_one(rid)
         sm_d = GenreSchema().dump(r)
         return sm_d, 200
+
+    def put(self, rid):
+        pass
+
+    def delete(self, rid):
+        pass
