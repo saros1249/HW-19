@@ -3,7 +3,7 @@ from flask import request, abort
 
 from constants import JWT_ALG, JWT_SECRET
 
-def auth_requered(func):
+def auth_required(func):
     def wrapper(*args, **kwargs):
         if not 'Authorization' in request.headers:
             abort(401)
@@ -19,7 +19,7 @@ def auth_requered(func):
     return wrapper
 
 
-def admin_requerd(func):
+def admin_required(func):
     def wrapper(*args, **kwargs):
         if not 'Authorization' in request.headers:
             abort(401)
@@ -31,7 +31,7 @@ def admin_requerd(func):
             print(f'JWT decode error: {e}')
             abort(401)
         else:
-            if data['role'] == 'admin'
+            if data['role'] == 'admin':
                 return func(*args, **kwargs)
         abort(403)
 
