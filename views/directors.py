@@ -9,7 +9,6 @@ director_ns = Namespace('directors')
 
 
 @director_ns.route('/')
-
 class DirectorsView(Resource):
     @auth_required
     def get(self):
@@ -44,4 +43,3 @@ class DirectorView(Resource):
     def delete(self, rid):
         director_service.delete(rid)
         return "", 204
-

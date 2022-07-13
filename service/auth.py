@@ -1,16 +1,22 @@
 import calendar
+import datetime
 
 import jwt
 
 from constants import JWT_SECRET, JWT_ALG
 from service.user import UserService
 
+
 class AuthService:
     def __init__(self, user_service: UserService):
         self.user_service = user_service
 
     def generate_tokens(self, username, password, is_refresh=False):
+        """
+        Создание токена.
+        """
         user = self.user_service.get_by_username(username)
+        print(user)
 
         if not user:
             return False
@@ -23,16 +29,19 @@ class AuthService:
 
         min30 = datetime.datetime.utcnow() + datetime.timedelta(minutes=30)
         data['exp'] = calendar.timegm(min30.timetuple())
-        access_token = jwt.encode(data, JWT_SECRET, algorihm=JWT_ALG)
+        access_token = jwt.encode(data, JWT_SECRET, algorithm=JWT_ALG)
 
         day130 = datetime.datetime.utcnow() + datetime.timedelta(days=30)
         data['exp'] = calendar.timegm(day130.timetuple())
-        refresh_token = jwt.encode(data, JWT_SECRET, algorihm=JWT_ALG)
+        refresh_token = jwt.encode(data, JWT_SECRET, algorithm=JWT_ALG)
 
         return {'access_token': access_token, 'refresh_token': refresh_token}
 
     def approve_refresh_token(self, refresh_token):
-        data = jwt.decode(refresh_token, JWT_SECRET, algorithm=[JWT_ALG])
+        """
+        Обновление refresh_token-а
+        """
+        data = jwt.decode(refresh_token, JWT_SECRET, algorithm=JWT_ALG)
         username = data['username']
         user = self.user_service.get_by_username(username)
 
@@ -42,6 +51,5 @@ class AuthService:
         now = calendar.timegm(datetime.datetime.utcnow().timetuple())
         expired = data['exp']
         if now > expired:
-            return  False
+            return False
         return self.generate_tokens(username, user.password, is_refresh=True)
-

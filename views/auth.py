@@ -4,13 +4,14 @@ from implemented import auth_service
 
 auth_ns = Namespace('auth')
 
+
 @auth_ns.route('/')
 class AuthView(Resource):
     def post(self):
         req_json = request.json
         username = req_json.get('username')
         password = req_json.get('password')
-        if not username or password:
+        if not username or not password:
             return 'Не введены данные: имя пользователя и/или пароль.', 400
 
         tokens = auth_service.generate_tokens(username, password)
