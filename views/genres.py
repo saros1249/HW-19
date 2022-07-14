@@ -23,7 +23,7 @@ class GenresView(Resource):
         return "", 201, {"location": f"/genres/{genre.id}"}
 
 
-@genre_ns.route('/<int:rid>')
+@genre_ns.route('/<int:gid>')
 class GenreView(Resource):
     @auth_required
     def get(self, gid):
